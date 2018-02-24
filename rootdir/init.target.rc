@@ -69,6 +69,9 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     user camera
     group camera system inet input graphics
     writepid /dev/cpuset/system-background/tasks
+
+# default country code
+setprop ro.boot.wificountrycode 00
 	
 #Start up peripheral manager
 service per_mgr /vendor/bin/pm-service
@@ -155,10 +158,6 @@ service wcnss-service /system/vendor/bin/wcnss_service
     group system wifi radio
     oneshot
 
-service imsstarter /system/bin/sh /system/etc/init.qti.ims.sh
-    class main
-    oneshot
-
 on property:vold.decrypt=trigger_restart_framework
     start imsstarter
 
@@ -212,6 +211,10 @@ on property:init.svc.surfaceflinger=running
 
 on property:init.svc.surfaceflinger=restarting
     stop ppd
+
+on property:init.svc.surfaceflinger=restarting
+    stop hwcomposer-2-1
+    start hwcomposer-2-1
 
 on property:init.svc.zygote=stopped
     stop ppd
